@@ -1,8 +1,8 @@
 import React from 'react';
-import { css } from 'emotion';
+import { css } from '@emotion/css';
 
 export default function Button({
-    title, onClock, type = 'action'
+    title, onClick, type = 'action'
 }) {
     return (
         <button className={buttonStyle(type)} onClick={onClick}>

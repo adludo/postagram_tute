@@ -5,8 +5,10 @@ import { listPosts } from './graphql/queries';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { v4 as uuid } from 'uuid';
 
-function App() {
+import Button from './Button';
 
+function App() {
+  const [showOverlay, updateOverlayVisibility] = useState(false);
   const [images, setImages] = useState([]);
   // const [posts, setPosts] = useState([]);
 
@@ -60,6 +62,7 @@ function App() {
       } */}
       <h1>Photo Album</h1>
       <span>Add new image</span>
+      <Button title="New Post" onClick={()=> updateOverlayVisibility(true)}/>
       <input
         type="file"
         accept='image/png'
