@@ -2,8 +2,9 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import { API } from 'aws-amplify';
 import { listPosts } from './graphql/queries';
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 
-export default function App() {
+function App() {
   const [posts, setPosts] =useState([])
   useEffect(() => {
     fetchPosts();
@@ -27,7 +28,10 @@ export default function App() {
           </div>
         ))
       }
+      <AmplifySignOut/>
     </div>
   )
 
 };
+
+export default withAuthenticator(App);
