@@ -55,30 +55,30 @@ function Router() {
   // }
 
   async function fetchPosts() {
-    try {
-      // query API, ask for 100 items?
-      let postData = await API.graphql({ query: listPosts, variables: { limit: 100 }});
-      let postsArray = postData.data.listPosts.items;
-      // const postData = await API.graphql({ query: listPosts });
+    // try {
+    // query API, ask for 100 items?
+    let postData = await API.graphql({ query: listPosts, variables: { limit: 100 } });
+    let postsArray = postData.data.listPosts.items;
+    // const postData = await API.graphql({ query: listPosts });
 
-      // mapover the image keys in posts array, get signed image urls for each image
-      postsArray = await Promise.all(postsArray.map(async post => {
-        const imageKey = await Storage.get(post.image);
-        post.image = imageKey;
-        return post;
-      }));
-      // update the posts array in the local state
-      setPostState(postsArray);
-      // setPosts(postData.data.listPosts.items);
-      console.log('fetching posts')
-    } catch (err) {
-      console.log({ err })
-    }
-
-    async function setPostState(postsArray) {
-      updatePosts(postsArray);
-    }
+    // mapover the image keys in posts array, get signed image urls for each image
+    postsArray = await Promise.all(postsArray.map(async post => {
+      const imageKey = await Storage.get(post.image);
+      post.image = imageKey;
+      return post;
+    }));
+    // update the posts array in the local state
+    setPostState(postsArray);
+    // setPosts(postData.data.listPosts.items);
+    //   console.log('fetching posts')
+    // } catch (err) {
+    //   console.log({ err })
   }
+
+  async function setPostState(postsArray) {
+    updatePosts(postsArray);
+  }
+
 
   return (
     <>
@@ -89,7 +89,7 @@ function Router() {
           <Button title="New Post" onClick={() => updatePost(true)} />
           <Switch>
             <Route exact path="/" >
-              <Posts posts={posts}/>
+              <Posts posts={posts} />
             </Route>
             <Route path="/post/:id">
               <Post />
@@ -99,7 +99,7 @@ function Router() {
         <AmplifySignOut />
       </HashRouter>
       { showOverlay && (
-        <CreatePost 
+        <CreatePost
           updateOverlayVisibility={updateOverlayVisibility}
           updatePosts={setPostState}
           posts={posts}

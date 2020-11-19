@@ -7,7 +7,7 @@ import { getPost } from './graphql/queries';
 export default function Post() {
     const [loading, updateLoading] = useState(true);
     const [post, updatePost] =useState(null);
-    const { id } = useParam();
+    const { id } = useParams();
     useEffect(() => {
         fetchPost()
     }, [])
@@ -16,7 +16,7 @@ export default function Post() {
         try {
             const postData = await API.graphql({ query: getPost, variables: { id }})
             const currentPost = postData.data.getPost;
-            const image = await Storage.get(current.image);
+            const image = await Storage.get(currentPost.image);
 
             currentPost.image = image;
             updatePost(currentPost);
