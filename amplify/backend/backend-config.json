@@ -12,7 +12,14 @@
               "description": "public"
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authpostagramtuteec5b4c8f"
+              }
+            }
+          ]
         }
       }
     }

@@ -9,14 +9,14 @@ import { css } from '@emotion/css';
 import { API, Auth, Storage } from 'aws-amplify';
 import { listPosts } from './graphql/queries';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 
 import Button from './Button';
 import Posts from './Posts';
-import Post from './Posts';
+import Post from './Post';
 import Header from './Header';
 import CreatePost from './CreatePost';
-import { updatePost } from './graphql/mutations';
+// import { updatePost } from './graphql/mutations';
 
 // Changing 'App' to 'Router'
 function Router() {
@@ -25,12 +25,13 @@ function Router() {
   const [posts, updatePosts] = useState([]);
   // const [images, setImages] = useState([]);
   // const [posts, setPosts] = useState([]);
+  const [myPosts, updateMyPosts] = useState([]);
 
   // fetch stuff when component loads
   useEffect(() => {
     //fetchImages();
     // checkUser();
-    fetchPosts();
+    fetchPost();
   }, []);
 
   // async function fetchImages() {
@@ -54,10 +55,13 @@ function Router() {
   //   console.log('user attributes: ', user.attributes);
   // }
 
-  async function fetchPosts() {
+  async function fetchPost() {
     // try {
     // query API, ask for 100 items?
-    let postData = await API.graphql({ query: listPosts, variables: { limit: 100 } });
+    let postData = await API.graphql({ 
+        query: listPosts, 
+        // authMode: 'AMAZON_COGNITO_USER_POOLS',
+        variables: { limit: 100 } });
     let postsArray = postData.data.listPosts.items;
     // const postData = await API.graphql({ query: listPosts });
 
@@ -76,6 +80,10 @@ function Router() {
   }
 
   async function setPostState(postsArray) {
+    const user = await Auth.currentAuthenticatedUser();
+    const myPostData = postsArray.filter(p => p.owner === user.username);
+    updateMyPosts(myPostData);
+
     updatePosts(postsArray);
   }
 
@@ -86,13 +94,17 @@ function Router() {
         <div className={contentStyle}>
           <Header />
           <hr className={dividerStyle} />
-          <Button title="New Post" onClick={() => updatePost(true)} />
+          {/* <Button title="New Post" onClick={() => updatePost(true)} /> */}
+          <Button title="New Post" onClick={() => updateOverlayVisibility(true)} />
           <Switch>
             <Route exact path="/" >
               <Posts posts={posts} />
             </Route>
             <Route path="/post/:id">
               <Post />
+            </Route>
+            <Route exact path="/myposts" >
+              <Posts posts={myPosts} />
             </Route>
           </Switch>
         </div>

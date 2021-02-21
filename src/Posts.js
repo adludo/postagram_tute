@@ -14,6 +14,7 @@ export default function Posts({
                         <div key={post.id} className={postContainer}>
                             <h1 className={postTitleStyle}>{post.name}</h1>
                             <img alt="post" className={imageStyle} src={post.image} />
+                            <h2>{post.id}</h2>
                         </div>
                     </Link>
                 ))

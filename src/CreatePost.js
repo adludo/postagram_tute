@@ -22,7 +22,7 @@ export default function CreatePost({
     const [formState, updateFormState] = useState(initialState)
 
     // 2. onChangeText handler updates the form state when a user types into a form field
-    function onChangeText(e) {
+    function onChangeText(e) { //e for element?
         e.persist();
         updateFormState(currenState => ({ ...currenState, [e.target.name]: e.target.value }));
     }
@@ -46,9 +46,12 @@ export default function CreatePost({
 
             await Storage.put(formState.image.name, formState.image.fileInfo);
             await API.graphql({
-                query: createPost, variables: { input: postInfo }
+                query: createPost, 
+                authMode: 'AMAZON_COGNITO_USER_POOLS',
+                variables: { input: postInfo }
             });
-            updatePosts([...posts, { ...postInfo, image: formState.file}]);
+            const { username } = await Auth.currentAuthenticatedUser();
+            updatePosts([...posts, { ...postInfo, image: formState.file, owner: username }]);
             updateFormState(currentState => ({ ...currentState, saving: false }));
             updateOverlayVisibility(false);
         } catch (err) {
