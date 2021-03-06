@@ -1,6 +1,10 @@
 import React from 'react';
 import { css } from '@emotion/css';
 import { Link } from 'react-router-dom';
+import Button from './Button';
+import DeletePost from './DeletePost';
+import { deletePost } from './graphql/mutations';
+
 
 export default function Posts({
     posts = []
@@ -10,14 +14,20 @@ export default function Posts({
             <h1>Posts</h1>
             {
                 posts.map(post => (
-                    <Link to={`\post/${post.id}`} className={linkStyle} key={post.id}>
-                        <div key={post.id} className={postContainer}>
-                            <h1 className={postTitleStyle}>{post.name}</h1>
-                            <img alt="post" className={imageStyle} src={post.image} />
-                            <h2>{post.id}</h2>
-                        </div>
-                    </Link>
+                    <div key={post.id}>                        
+                        <Link to={`\post/${post.id}`} className={linkStyle} key={post.id}>
+                            {/* <div key={post.id} className={postContainer}> */}
+                            <div className={postContainer}>
+                                <h1 className={postTitleStyle}>{post.name}</h1>
+                                <img alt="post" className={imageStyle} src={post.image} />
+                                <h2>{post.id}</h2>
+                            </div>
+                        </Link>
+                        <Button title="Delete Post" onClick={() => DeletePost(post)} />
+                    </div>
+                    
                 ))
+                
             }
         </>
     )

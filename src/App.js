@@ -6,7 +6,7 @@ import {
   Route
 } from "react-router-dom";
 import { css } from '@emotion/css';
-import { API, Auth, Storage } from 'aws-amplify';
+import { API, Auth, graphqlOperation, Storage } from 'aws-amplify';
 import { listPosts } from './graphql/queries';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 // import { v4 as uuid } from 'uuid';
@@ -16,6 +16,7 @@ import Posts from './Posts';
 import Post from './Post';
 import Header from './Header';
 import CreatePost from './CreatePost';
+import { deletePost } from './graphql/mutations';
 // import { updatePost } from './graphql/mutations';
 
 // Changing 'App' to 'Router'
@@ -33,6 +34,18 @@ function Router() {
     // checkUser();
     fetchPost();
   }, []);
+
+  //testing removing data
+  /* const removePost = async id => {
+    try {
+      const input = { id };
+      const result = await API.graphql(graphqlOperation(deletePost, { input }));
+      const deletePostId = result.data.deletePost.id;
+
+    } catch (err) {
+      console.log(err);
+    };
+  }  */
 
   // async function fetchImages() {
   //   let s3images = await Storage.list('');
@@ -62,6 +75,7 @@ function Router() {
         query: listPosts, 
         // authMode: 'AMAZON_COGNITO_USER_POOLS',
         variables: { limit: 100 } });
+        // console.log(postData)
     let postsArray = postData.data.listPosts.items;
     // const postData = await API.graphql({ query: listPosts });
 

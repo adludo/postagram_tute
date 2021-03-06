@@ -25,4 +25,7 @@ const buttonStyle = type => css`
     :hover {
         background-color: #363636;
     }
+    :active {
+        background-color: #DADADA;
+    }
 `

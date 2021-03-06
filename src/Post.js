@@ -3,6 +3,8 @@ import { css } from '@emotion/css';
 import { useParams } from 'react-router-dom';
 import { API, Storage } from 'aws-amplify';
 import { getPost } from './graphql/queries';
+import Button from './Button';
+import DeletePost from './DeletePost';
 
 export default function Post() {
     const [loading, updateLoading] = useState(true);
@@ -14,7 +16,10 @@ export default function Post() {
 
     async function fetchPost() {
         try {
-            const postData = await API.graphql({ query: getPost, variables: { id }})
+            const postData = await API.graphql({ 
+                query: getPost, 
+                variables: { id }
+            })
             const currentPost = postData.data.getPost;
             const image = await Storage.get(currentPost.image);
 
@@ -34,6 +39,7 @@ export default function Post() {
             <h3 className={locationStyle}>{post.location}</h3>
             <p>{post.description}</p>
             <img alt="post" src={post.image} className={imageStyle}/>
+            <Button title="Delete" onClick={() => DeletePost(post)}/>
         </>
     )
 }

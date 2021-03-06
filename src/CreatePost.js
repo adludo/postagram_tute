@@ -84,6 +84,7 @@ export default function CreatePost({
                 onChange={onChangeFile}
             />
 
+
             { formState.file && <img className={imageStyle} alt="preview" src={formState.file} /> }
             <Button title="Create New Post" onClick={save}/>
             <Button type="cancel" title="Cancel" onClick={() => updateOverlayVisibility(false)} />
